@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { SeriesModule } from './series/series.module';
+import { SeasonsModule } from './seasons/seasons.module';
+import { EpisodesModule } from './episodes/episodes.module';
 
 @Module({
-  imports: [],
+  imports: [SeriesModule, SeasonsModule, EpisodesModule],
   controllers: [AppController],
   providers: [AppService],
 })
