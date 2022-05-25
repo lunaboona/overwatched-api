@@ -25,10 +25,12 @@ export class SeriesService {
   }
 
   async update(id: string, updateSeriesDto: UpdateSeriesDto) {
+    // TODO return updated document instead of current one
     return this.seriesModel.findByIdAndUpdate(id, updateSeriesDto);
   }
 
   async remove(id: string) {
+    // TODO dont return document
     return this.seriesModel.findByIdAndRemove(id);
   }
 }
