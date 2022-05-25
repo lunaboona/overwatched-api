@@ -4,9 +4,15 @@ import { AppService } from './app.service';
 import { SeriesModule } from './series/series.module';
 import { SeasonsModule } from './seasons/seasons.module';
 import { EpisodesModule } from './episodes/episodes.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [SeriesModule, SeasonsModule, EpisodesModule],
+  imports: [
+    MongooseModule.forRoot('mongodb://localhost:27017'),
+    SeriesModule,
+    SeasonsModule,
+    EpisodesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
