@@ -16,7 +16,7 @@ export class SeasonsService {
 
   async findAll(seriesId: string): Promise<Season[]> {
     // TODO order by number
-    return this.seasonModel.find({ series: seriesId }).exec();
+    return this.seasonModel.find({ series: seriesId }).sort({ number: 1 }).exec();
   }
 
   async findOne(id: string): Promise<Season> {
