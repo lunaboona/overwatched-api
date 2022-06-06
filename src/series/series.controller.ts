@@ -7,17 +7,16 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { Series } from './schemas/series.schema';
 import { SeriesService } from './series.service';
-import { CreateSeriesDto } from './dto/create-series.dto';
-import { UpdateSeriesDto } from './dto/update-series.dto';
 
 @Controller('series')
 export class SeriesController {
   constructor(private readonly seriesService: SeriesService) {}
 
   @Post()
-  create(@Body() createSeriesDto: CreateSeriesDto) {
-    return this.seriesService.create(createSeriesDto);
+  create(@Body() input: Series) {
+    return this.seriesService.create(input);
   }
 
   @Get()
@@ -31,8 +30,8 @@ export class SeriesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSeriesDto: UpdateSeriesDto) {
-    return this.seriesService.update(id, updateSeriesDto);
+  update(@Param('id') id: string, @Body() input: Series) {
+    return this.seriesService.update(id, input);
   }
 
   @Delete(':id')

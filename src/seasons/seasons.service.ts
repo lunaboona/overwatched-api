@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSeasonDto } from './dto/create-season.dto';
-import { UpdateSeasonDto } from './dto/update-season.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Season, SeasonDocument } from './schemas/season.schema';
 
 @Injectable()
 export class SeasonsService {
-  create(createSeasonDto: CreateSeasonDto) {
-    return 'This action adds a new season';
+  constructor(
+    @InjectModel(Season.name) private seasonModel: Model<SeasonDocument>,
+  ) {}
+
+  async create(input: Season): Promise<Season> {
+    const createdSeason = new this.seasonModel(input);
+    return createdSeason.save();
   }
 
-  findAll() {
-    return `This action returns all seasons`;
+  async findAll(seriesId: string): Promise<Season[]> {
+    // TODO order by number
+    return this.seasonModel.find({ series: seriesId }).exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} season`;
+  async findOne(id: string): Promise<Season> {
+    return this.seasonModel.findById(id).exec();
   }
 
-  update(id: number, updateSeasonDto: UpdateSeasonDto) {
-    return `This action updates a #${id} season`;
+  async update(id: string, input: Season) {
+    return this.seasonModel.findByIdAndUpdate(id, input);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} season`;
+  async remove(id: string) {
+    return this.seasonModel.findByIdAndRemove(id);
   }
 }

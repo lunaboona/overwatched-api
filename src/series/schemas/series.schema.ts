@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Season } from 'src/seasons/schemas/season.schema';
 
 export type SeriesDocument = Series & Document;
 
@@ -25,6 +26,9 @@ export class Series {
 
   @Prop()
   score: number;
+
+  @Prop([{ type: Types.ObjectId, ref: 'Season' }])
+  seasons: Season[];
 }
 
 export const SeriesSchema = SchemaFactory.createForClass(Series);

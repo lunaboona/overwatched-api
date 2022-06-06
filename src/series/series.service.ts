@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateSeriesDto } from './dto/create-series.dto';
-import { UpdateSeriesDto } from './dto/update-series.dto';
 import { Series, SeriesDocument } from './schemas/series.schema';
 
 @Injectable()
@@ -11,26 +9,24 @@ export class SeriesService {
     @InjectModel(Series.name) private seriesModel: Model<SeriesDocument>,
   ) {}
 
-  async create(createSeriesDto: CreateSeriesDto): Promise<Series> {
-    const createdSeries = new this.seriesModel(createSeriesDto);
+  async create(input: Series): Promise<Series> {
+    const createdSeries = new this.seriesModel(input);
     return createdSeries.save();
   }
 
   async findAll(): Promise<Series[]> {
-    return this.seriesModel.find().exec();
+    return this.seriesModel.find().populate('seasons').exec();
   }
 
   async findOne(id: string): Promise<Series> {
-    return this.seriesModel.findById(id).exec();
+    return this.seriesModel.findById(id).populate('seasons').exec();
   }
 
-  async update(id: string, updateSeriesDto: UpdateSeriesDto) {
-    // TODO return updated document instead of current one
-    return this.seriesModel.findByIdAndUpdate(id, updateSeriesDto);
+  async update(id: string, input: Series) {
+    return this.seriesModel.findByIdAndUpdate(id, input);
   }
 
   async remove(id: string) {
-    // TODO dont return document
     return this.seriesModel.findByIdAndRemove(id);
   }
 }
