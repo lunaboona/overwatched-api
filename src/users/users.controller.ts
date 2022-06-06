@@ -12,10 +12,14 @@ import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { LoginDto } from './dto/login.dto';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Post()
   create(@Body() createUsersDto: CreateUsersDto) {
@@ -45,6 +49,6 @@ export class UsersController {
   @Post('authenticate')
   @HttpCode(200)
   authenticate(@Body() loginDto: LoginDto) {
-    return this.usersService.authenticate(loginDto);
+    return this.authService.authenticate(loginDto);
   }
 }
