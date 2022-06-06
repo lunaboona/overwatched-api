@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
-import { CreateEpisodeDto } from './dto/create-episode.dto';
-import { UpdateEpisodeDto } from './dto/update-episode.dto';
+import { Episode } from './schemas/episode.schema';
 
 @Controller('episodes')
 export class EpisodesController {
   constructor(private readonly episodesService: EpisodesService) {}
 
   @Post()
-  create(@Body() createEpisodeDto: CreateEpisodeDto) {
-    return this.episodesService.create(createEpisodeDto);
+  create(@Body() input: Episode) {
+    return this.episodesService.create(input);
   }
 
   @Get()
-  findAll() {
-    return this.episodesService.findAll();
+  findAll(@Query('season') seasonId: string) {
+    return this.episodesService.findAll(seasonId);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.episodesService.findOne(+id);
+    return this.episodesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEpisodeDto: UpdateEpisodeDto) {
-    return this.episodesService.update(+id, updateEpisodeDto);
+  update(@Param('id') id: string, @Body() input: Episode) {
+    return this.episodesService.update(id, input);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.episodesService.remove(+id);
+    return this.episodesService.remove(id);
   }
 }

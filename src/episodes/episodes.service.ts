@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEpisodeDto } from './dto/create-episode.dto';
-import { UpdateEpisodeDto } from './dto/update-episode.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Episode, EpisodeDocument } from './schemas/episode.schema';
 
 @Injectable()
 export class EpisodesService {
-  create(createEpisodeDto: CreateEpisodeDto) {
-    return 'This action adds a new episode';
+  constructor(
+    @InjectModel(Episode.name) private episodeModel: Model<EpisodeDocument>,
+  ) { }
+
+  async create(input: Episode): Promise<Episode> {
+    const createdEpisode = new this.episodeModel(input);
+    return createdEpisode.save();
   }
 
-  findAll() {
-    return `This action returns all episodes`;
+  async findAll(seasonId: string): Promise<Episode[]> {
+    // TODO order by number
+    return this.episodeModel.find({ season: seasonId }).exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} episode`;
+  async findOne(id: string): Promise<Episode> {
+    return this.episodeModel.findById(id).exec();
   }
 
-  update(id: number, updateEpisodeDto: UpdateEpisodeDto) {
-    return `This action updates a #${id} episode`;
+  async update(id: string, input: Episode) {
+    return this.episodeModel.findByIdAndUpdate(id, input);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} episode`;
+  async remove(id: string) {
+    return this.episodeModel.findByIdAndRemove(id);
   }
 }
