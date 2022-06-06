@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
+import { LoginDto } from './dto/login.dto';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { Users, UsersDocument } from './schemas/users.schema';
-import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +21,7 @@ export class UsersService {
 
     const createdUsers = new this.usersModel(createUsersDto);
     return createdUsers.save();
+    // TODO check for duplicated username
   }
 
   async findAll(): Promise<Users[]> {
@@ -38,5 +40,17 @@ export class UsersService {
   async remove(id: string) {
     // TODO dont return document
     return this.usersModel.findByIdAndRemove(id);
+  }
+
+  async authenticate(loginDto: LoginDto) {
+    const user = await this.usersModel
+      .findOne({ username: loginDto.username })
+      .exec();
+
+    if (bcrypt.compareSync(loginDto.password, user.password)) {
+      return { token: 'placeholder' };
+    } else {
+      throw new BadRequestException('Login inválido');
+    }
   }
 }
