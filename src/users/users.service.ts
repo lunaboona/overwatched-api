@@ -31,6 +31,10 @@ export class UsersService {
     return this.usersModel.findById(id).exec();
   }
 
+  async findOneByQuery(obj): Promise<Users> {
+    return this.usersModel.findOne(obj).exec();
+  }
+
   async update(id: string, updateUsersDto: UpdateUsersDto) {
     // TODO return updated document instead of current one
     return this.usersModel.findByIdAndUpdate(id, updateUsersDto);

@@ -6,20 +6,14 @@ import {
   Patch,
   Param,
   Delete,
-  HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
-import { LoginDto } from './dto/login.dto';
-import { AuthService } from 'src/auth/auth.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
   create(@Body() createUsersDto: CreateUsersDto) {
@@ -44,11 +38,5 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
-  }
-
-  @Post('authenticate')
-  @HttpCode(200)
-  authenticate(@Body() loginDto: LoginDto) {
-    return this.authService.authenticate(loginDto);
   }
 }
