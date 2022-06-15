@@ -1,4 +1,4 @@
 export class LoginResponseDto {
-  id: string;
+  userId: string;
   username: string;
 }
