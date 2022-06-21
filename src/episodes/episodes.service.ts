@@ -29,4 +29,12 @@ export class EpisodesService {
   async remove(id: string) {
     return this.episodeModel.findByIdAndRemove(id);
   }
+
+  async addWatched(id: string, userId: string) {
+    return this.episodeModel.findByIdAndUpdate(id, { $push: { watched: userId } }, { new: true, useFindAndModify: false });
+  }
+
+  async removeWatched(id: string, userId: string) {
+    return this.episodeModel.findByIdAndUpdate(id, { $pull: { watched: userId } }, { new: true, useFindAndModify: false });
+  }
 }
