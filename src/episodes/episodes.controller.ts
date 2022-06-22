@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request } from '@nestjs/common';
 import { ToggleWatchedDto } from './dto/toggle-watched.dto';
 import { EpisodesService } from './episodes.service';
 import { Episode } from './schemas/episode.schema';
@@ -13,8 +13,8 @@ export class EpisodesController {
   }
 
   @Get()
-  findAll(@Query('season') seasonId: string) {
-    return this.episodesService.findAll(seasonId);
+  findAll(@Query('season') seasonId: string, @Request() req: any) {
+    return this.episodesService.findAll(seasonId, req.user.userId);
   }
 
   @Get(':id')
