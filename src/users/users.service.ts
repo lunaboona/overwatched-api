@@ -30,7 +30,8 @@ export class UsersService {
     }
 
     const createdUsers = new this.usersModel(createUsersDto);
-    return createdUsers.save();
+    await createdUsers.save();
+    return;
   }
 
   async findAll(): Promise<Users[]> {
