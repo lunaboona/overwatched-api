@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request } from '@nestjs/common';
-import { ToggleWatchedDto } from './dto/toggle-watched.dto';
 import { EpisodesService } from './episodes.service';
 import { Episode } from './schemas/episode.schema';
 
@@ -33,12 +32,12 @@ export class EpisodesController {
   }
 
   @Patch(':id/watched')
-  addWatched(@Param('id') id: string, @Body() input: ToggleWatchedDto) {
-    return this.episodesService.addWatched(id, input.userId);
+  addWatched(@Param('id') id: string, @Request() req: any) {
+    return this.episodesService.addWatched(id, req.user.userId);
   }
 
   @Patch(':id/remove-watched')
-  removeWatched(@Param('id') id: string, @Body() input: ToggleWatchedDto) {
-    return this.episodesService.removeWatched(id, input.userId);
+  removeWatched(@Param('id') id: string, @Request() req: any) {
+    return this.episodesService.removeWatched(id, req.user.userId);
   }
 }
